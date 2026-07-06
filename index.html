@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>推荐链路 Demo</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <p class="eyebrow">Recommendation Pipeline</p>
+          <h1 id="page-title">精排与重排链路沙盘</h1>
+          <p class="intro">
+            用一个轻量前端 Demo 展示推荐系统里常见的精排打分、业务约束、去重、多样性和探索混排。
+          </p>
+        </div>
+        <div class="summary-panel" aria-label="链路摘要">
+          <span>当前场景</span>
+          <strong id="scenario-label">兴趣强化</strong>
+          <small id="top-item-label">Top item: -</small>
+        </div>
+      </section>
+
+      <section class="control-bar" aria-label="推荐参数控制">
+        <label>
+          <span>场景</span>
+          <select id="scenario-select">
+            <option value="interest">兴趣强化</option>
+            <option value="fresh">新鲜度优先</option>
+            <option value="commerce">转化优先</option>
+          </select>
+        </label>
+        <label>
+          <span>CTR 权重</span>
+          <input id="ctr-weight" type="range" min="0" max="100" value="42">
+          <output id="ctr-output">0.42</output>
+        </label>
+        <label>
+          <span>兴趣权重</span>
+          <input id="interest-weight" type="range" min="0" max="100" value="30">
+          <output id="interest-output">0.30</output>
+        </label>
+        <label>
+          <span>新鲜度权重</span>
+          <input id="freshness-weight" type="range" min="0" max="100" value="16">
+          <output id="freshness-output">0.16</output>
+        </label>
+        <label>
+          <span>探索比例</span>
+          <input id="explore-weight" type="range" min="0" max="40" value="12">
+          <output id="explore-output">12%</output>
+        </label>
+      </section>
+
+      <section class="pipeline-grid">
+        <article class="panel">
+          <div class="section-heading">
+            <div>
+              <h2>精排候选</h2>
+              <p>模拟 pointwise 打分：CTR、兴趣匹配、新鲜度、转化倾向加权融合。</p>
+            </div>
+            <button class="icon-button" id="reset-button" type="button" aria-label="恢复默认参数" title="恢复默认参数">↻</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>内容</th>
+                  <th>类目</th>
+                  <th>CTR</th>
+                  <th>兴趣</th>
+                  <th>DeepFM</th>
+                  <th>精排分</th>
+                </tr>
+              </thead>
+              <tbody id="ranking-body"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <aside class="panel final-panel">
+          <div class="section-heading">
+            <div>
+              <h2>重排结果</h2>
+              <p>按精排分排序后，加入类目打散、作者去重、探索位和疲劳惩罚。</p>
+            </div>
+          </div>
+          <ol class="feed-list" id="feed-list"></ol>
+        </aside>
+      </section>
+
+      <section class="diagnostics">
+        <div class="metric">
+          <span id="diversity-score">0</span>
+          <small>类目覆盖</small>
+        </div>
+        <div class="metric">
+          <span id="avg-score">0.000</span>
+          <small>平均最终分</small>
+        </div>
+        <div class="metric">
+          <span id="explore-count">0</span>
+          <small>探索内容</small>
+        </div>
+        <div class="metric wide">
+          <span id="constraint-text">-</span>
+          <small>重排约束</small>
+        </div>
+      </section>
+    </main>
+
+    <script src="./deepfm.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
